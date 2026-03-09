@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>成长之路 · 射雕英雄传</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <h1>成长之路</h1>
+      <p class="subtitle">以郭靖之路，映我之修行</p>
+    </header>
+
+    <!-- Realm Progress Bar -->
+    <section class="realm-progress">
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="realm-markers" id="realmMarkers"></div>
+    </section>
+
+    <!-- Current Realm Display -->
+    <section class="current-realm" id="currentRealm">
+      <!-- Filled by JS -->
+    </section>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="goals">目标修炼</button>
+      <button class="tab" data-tab="achievements">成就武库</button>
+      <button class="tab" data-tab="log">修行日志</button>
+      <button class="tab" data-tab="dimensions">能力图谱</button>
+      <button class="tab" data-tab="review">复盘系统</button>
+      <button class="tab" data-tab="brag">成就录</button>
+      <button class="tab" data-tab="map">全境地图</button>
+    </nav>
+
+    <!-- Tab Contents -->
+    <main class="tab-content">
+      <!-- Goals Tab -->
+      <div class="panel active" id="panel-goals">
+        <div class="panel-header">
+          <h3>当前修炼目标</h3>
+          <button class="btn btn-primary" onclick="showAddGoal()">+ 新增目标</button>
+        </div>
+        <div id="goalList" class="goal-list"></div>
+
+        <!-- Add Goal Modal -->
+        <div class="modal" id="goalModal">
+          <div class="modal-content">
+            <h3>新增修炼目标</h3>
+            <input type="text" id="goalTitle" placeholder="目标名称（如：完成 JavaScript 基础学习）">
+            <textarea id="goalDesc" placeholder="具体描述（如：完成 FreeCodeCamp 基础课程全部章节）"></textarea>
+            <select id="goalCategory">
+              <option value="技能修炼">技能修炼</option>
+              <option value="内功心法">内功心法（底层能力）</option>
+              <option value="外功招式">外功招式（具体技术）</option>
+              <option value="实战历练">实战历练（项目经验）</option>
+              <option value="心境修为">心境修为（认知/心态）</option>
+            </select>
+            <div class="modal-actions">
+              <button class="btn" onclick="closeModal('goalModal')">取消</button>
+              <button class="btn btn-primary" onclick="addGoal()">确认</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Achievements Tab -->
+      <div class="panel" id="panel-achievements">
+        <div class="panel-header">
+          <h3>成就武库</h3>
+          <button class="btn btn-primary" onclick="showAddAchievement()">+ 记录成就</button>
+        </div>
+        <div id="achievementList" class="achievement-list"></div>
+
+        <div class="modal" id="achievementModal">
+          <div class="modal-content">
+            <h3>记录新成就</h3>
+            <input type="text" id="achTitle" placeholder="成就名称（如：首次独立部署项目）">
+            <textarea id="achDesc" placeholder="成就描述"></textarea>
+            <select id="achLevel">
+              <option value="copper">铜 · 初窥门径</option>
+              <option value="silver">银 · 小有所成</option>
+              <option value="gold">金 · 炉火纯青</option>
+              <option value="legendary">传说 · 登峰造极</option>
+            </select>
+            <div class="modal-actions">
+              <button class="btn" onclick="closeModal('achievementModal')">取消</button>
+              <button class="btn btn-primary" onclick="addAchievement()">确认</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Log Tab -->
+      <div class="panel" id="panel-log">
+        <div class="panel-header">
+          <h3>修行日志</h3>
+          <button class="btn btn-primary" onclick="showAddLog()">+ 写日志</button>
+        </div>
+        <div id="logList" class="log-list"></div>
+
+        <div class="modal" id="logModal">
+          <div class="modal-content">
+            <h3>记录今日修行</h3>
+            <input type="text" id="logTitle" placeholder="今日主题（如：攻克 React Hooks）">
+            <textarea id="logContent" placeholder="今日所学、所悟、所感..."></textarea>
+            <select id="logMood">
+              <option value="breakthrough">顿悟 · 拨云见日</option>
+              <option value="progress">精进 · 稳步前行</option>
+              <option value="struggle">苦修 · 砥砺前行</option>
+              <option value="reflect">内省 · 温故知新</option>
+            </select>
+            <div class="modal-actions">
+              <button class="btn" onclick="closeModal('logModal')">取消</button>
+              <button class="btn btn-primary" onclick="addLog()">确认</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Tab -->
+      <div class="panel" id="panel-map">
+        <h3>郭靖成长全境</h3>
+        <div class="realm-map" id="realmMap"></div>
+      </div>
+
+      <!-- Dimensions Tab (v2) -->
+      <div class="panel" id="panel-dimensions">
+        <div class="panel-header">
+          <h3>能力图谱</h3>
+        </div>
+        <div class="dimension-radar-container">
+          <canvas id="dimensionRadar"></canvas>
+        </div>
+        <div id="dimensionOverall" class="dimension-overall"></div>
+        <div id="dimensionScoringUI" class="dimension-scoring-ui"></div>
+      </div>
+
+      <!-- Review Tab (v2) -->
+      <div class="panel" id="panel-review">
+        <div class="panel-header">
+          <h3>复盘系统</h3>
+        </div>
+        <div class="review-sub-tabs">
+          <button class="review-sub-tab active" data-type="weekly" onclick="switchReviewType('weekly')">周复盘</button>
+          <button class="review-sub-tab" data-type="monthly" onclick="switchReviewType('monthly')">月复盘</button>
+          <button class="review-sub-tab" data-type="quarterly" onclick="switchReviewType('quarterly')">季度复盘</button>
+        </div>
+        <div id="reviewFormArea"></div>
+        <h4 style="margin:20px 0 12px;color:var(--text-secondary);font-size:0.95em;">历史记录</h4>
+        <div id="reviewHistory"></div>
+      </div>
+
+      <!-- Brag Tab (v2) -->
+      <div class="panel" id="panel-brag">
+        <div class="panel-header">
+          <h3>成就录</h3>
+          <button class="btn btn-primary" onclick="exportCurrentBrag()">导出 Markdown</button>
+        </div>
+        <div class="brag-quarter-select">
+          <label>选择季度：</label>
+          <select id="bragQuarterSelect" onchange="renderBragTab()"></select>
+        </div>
+        <div id="bragContent"></div>
+      </div>
+    </main>
+
+    <!-- Level Up Modal -->
+    <div class="modal" id="levelUpModal">
+      <div class="modal-content level-up-content">
+        <div class="level-up-effect">
+          <span class="level-up-icon">⚔️</span>
+          <h2>突破境界！</h2>
+          <p id="levelUpText"></p>
+          <div id="levelUpDetail"></div>
+          <button class="btn btn-primary" onclick="closeModal('levelUpModal')">继续修行</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/dimensions.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/review.js"></script>
+  <script src="js/brag.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
