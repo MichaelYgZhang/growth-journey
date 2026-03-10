@@ -30,10 +30,10 @@
 
     <!-- Tabs -->
     <nav class="tabs">
-      <button class="tab active" data-tab="goals">目标修炼</button>
+      <button class="tab active" data-tab="dimensions">能力图谱</button>
+      <button class="tab" data-tab="goals">目标修炼</button>
       <button class="tab" data-tab="achievements">成就武库</button>
       <button class="tab" data-tab="log">修行日志</button>
-      <button class="tab" data-tab="dimensions">能力图谱</button>
       <button class="tab" data-tab="review">复盘系统</button>
       <button class="tab" data-tab="brag">成就录</button>
       <button class="tab" data-tab="map">全境地图</button>
@@ -42,7 +42,7 @@
     <!-- Tab Contents -->
     <main class="tab-content">
       <!-- Goals Tab -->
-      <div class="panel active" id="panel-goals">
+      <div class="panel" id="panel-goals">
         <div class="panel-header">
           <h3>当前修炼目标</h3>
           <button class="btn btn-primary" onclick="showAddGoal()">+ 新增目标</button>
@@ -131,7 +131,7 @@
       </div>
 
       <!-- Dimensions Tab (v2) -->
-      <div class="panel" id="panel-dimensions">
+      <div class="panel active" id="panel-dimensions">
         <div class="panel-header">
           <h3>能力图谱</h3>
         </div>

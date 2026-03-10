@@ -600,3 +600,4 @@ document.querySelectorAll('.modal').forEach(modal => {
 // ─── Init ───
 initTabs();
 render();
+renderDimensions();
